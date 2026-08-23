@@ -1,85 +1,110 @@
 <style>
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
-  .gd-wrap { max-width: 860px; margin: 0 auto; color: #2B2B28; }
+  .gd { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; max-width: 900px; margin: 0 auto; color: #2B2B28; }
   .gd-card { background: #FBFAF7; border: 1px solid #E4E0D6; border-radius: 12px; padding: 1rem 1.25rem; }
-  .gd-row { display: flex; align-items: center; gap: 12px; margin: 0 0 1rem; }
-  .gd-row label { font-size: 13px; color: #5F5E5A; width: 190px; flex-shrink: 0; }
-  .gd-row input[type=range] { flex: 1; accent-color: #3B6D11; }
-  .gd-row .gd-val { font-size: 13px; font-weight: 600; min-width: 56px; text-align: right; }
-  .gd-toggle { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #5F5E5A; }
+  .gd-hero { text-align: center; padding: 1.5rem 1rem 1.25rem; }
+  .gd-hero-num { font-size: 52px; font-weight: 700; color: #2C4A3E; line-height: 1; }
+  .gd-hero-sub { font-size: 14px; color: #5F5E5A; margin-top: 8px; }
+  .gd-presets { display: flex; gap: 8px; flex-wrap: wrap; margin: 1rem 0; }
+  .gd-preset-btn { border: 1px solid #E4E0D6; background: #fff; border-radius: 999px; padding: 6px 14px; font-size: 13px; cursor: pointer; color: #2B2B28; }
+  .gd-preset-btn.active { background: #2C4A3E; color: #fff; border-color: #2C4A3E; }
+  .gd-slider-row { margin: 1rem 0; }
+  .gd-slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: #898781; margin-top: 2px; }
+  .gd-slider-row input[type=range] { width: 100%; accent-color: #3B6D11; }
+  .gd-strictness-val { text-align: center; font-size: 13px; font-weight: 600; color: #2C4A3E; margin-bottom: 4px; }
+  .gd-adv-toggle { font-size: 12px; color: #5F5E5A; cursor: pointer; text-decoration: underline; background: none; border: none; padding: 0; margin-top: 4px; }
+  .gd-adv-panel { display: none; margin-top: 0.75rem; border-top: 1px solid #E4E0D6; padding-top: 0.75rem; }
+  .gd-adv-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 12px; }
+  .gd-adv-row label { width: 150px; color: #5F5E5A; flex-shrink: 0; }
+  .gd-adv-row input[type=range] { flex: 1; accent-color: #898781; }
+  .gd-adv-row .gd-adv-val { width: 70px; text-align: right; font-weight: 600; }
+  .gd-next-list { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 4px; }
+  .gd-next-card { flex: 0 0 auto; background: #EAF3DE; border-radius: 10px; padding: 10px 14px; min-width: 140px; }
+  .gd-next-card .gd-next-date { font-size: 13px; font-weight: 600; color: #27500A; }
+  .gd-next-card .gd-next-detail { font-size: 11px; color: #3B6D11; margin-top: 4px; line-height: 1.5; }
+  .gd-year-tabs { display: flex; gap: 6px; margin-bottom: 0.75rem; }
+  .gd-year-tab { border: 1px solid #E4E0D6; background: #fff; border-radius: 8px; padding: 4px 12px; font-size: 13px; cursor: pointer; }
+  .gd-year-tab.active { background: #2C4A3E; color: #fff; border-color: #2C4A3E; }
+  .gd-cal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+  .gd-cal-month { font-size: 11px; }
+  .gd-cal-month-name { font-weight: 600; margin-bottom: 4px; color: #2B2B28; }
+  .gd-cal-days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+  .gd-cal-cell { width: 100%; aspect-ratio: 1; border-radius: 3px; cursor: pointer; }
+  .gd-legend { display: flex; gap: 14px; font-size: 12px; color: #5F5E5A; margin: 0.75rem 0; align-items: center; }
+  .gd-legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: middle; }
+  .gd-detail { font-size: 13px; color: #2B2B28; min-height: 20px; }
   .gd-stat-label { font-size: 12px; color: #5F5E5A; margin-bottom: 4px; }
-  .gd-stat-val { font-size: 26px; font-weight: 600; color: #2C4A3E; }
+  .gd-stat-val { font-size: 22px; font-weight: 600; color: #2C4A3E; }
+  .gd-section-title { font-size: 15px; font-weight: 600; margin: 1.75rem 0 0.75rem; }
 </style>
 
-<div class="gd-wrap">
-  <h2 style="font-size:18px; font-weight:600; margin:0 0 4px;">Good outdoor days — Bentonville, AR</h2>
-  <p id="gd-daterange" style="font-size:13px; color:#5F5E5A; margin:0 0 1rem;">Loading two years of daily weather history…</p>
-
+<div class="gd">
   <div id="gd-loading" style="padding:2rem 0; text-align:center; color:#5F5E5A; font-size:14px;">
-    Fetching historical data from Open-Meteo…
+    Fetching two years of historical weather data from Open-Meteo…
   </div>
 
   <div id="gd-content" style="display:none;">
 
-    <div class="gd-card" style="margin-bottom:1rem;">
-      <div class="gd-row">
-        <label for="gd-tmin">Min high temp (°F)</label>
-        <input type="range" id="gd-tmin" min="0" max="100" value="50" step="1">
-        <span class="gd-val" id="gd-tmin-out">50°F</span>
+    <div class="gd-card gd-hero">
+      <div class="gd-hero-num" id="gd-hero-num">–</div>
+      <div style="font-size:14px; color:#5F5E5A; margin-top:2px;">good outdoor days per year, estimated</div>
+      <div class="gd-hero-sub" id="gd-hero-sub"></div>
+    </div>
+
+    <div class="gd-card" style="margin-top:1rem;">
+      <div style="font-size:13px; color:#5F5E5A; margin-bottom:6px;">What are you planning?</div>
+      <div class="gd-presets" id="gd-presets"></div>
+
+      <div class="gd-slider-row">
+        <div class="gd-strictness-val" id="gd-strictness-label">Balanced</div>
+        <input type="range" id="gd-strictness" min="0" max="100" value="65" step="1">
+        <div class="gd-slider-labels"><span>Relaxed — take what I can get</span><span>Perfect — ideal conditions only</span></div>
       </div>
-      <div class="gd-row">
-        <label for="gd-tmax">Max high temp (°F)</label>
-        <input type="range" id="gd-tmax" min="40" max="120" value="90" step="1">
-        <span class="gd-val" id="gd-tmax-out">90°F</span>
-      </div>
-      <div class="gd-row">
-        <label for="gd-precip">Max precipitation (in)</label>
-        <input type="range" id="gd-precip" min="0" max="1" value="0.05" step="0.05">
-        <span class="gd-val" id="gd-precip-out">0.05"</span>
-      </div>
-      <div class="gd-row">
-        <label for="gd-wind">Max wind speed (mph)</label>
-        <input type="range" id="gd-wind" min="5" max="40" value="20" step="1">
-        <span class="gd-val" id="gd-wind-out">20 mph</span>
-      </div>
-      <div class="gd-row">
-        <label for="gd-humidity">Max avg humidity (%)</label>
-        <input type="range" id="gd-humidity" min="40" max="100" value="90" step="5">
-        <span class="gd-val" id="gd-humidity-out">90%</span>
-      </div>
-      <div class="gd-row" style="margin-bottom:0;">
-        <label></label>
-        <span class="gd-toggle">
-          <input type="checkbox" id="gd-stormfree" checked>
-          <label for="gd-stormfree" style="width:auto;">Exclude thunderstorm / severe weather days</label>
-        </span>
+
+      <button class="gd-adv-toggle" id="gd-adv-toggle">Fine-tune the numbers manually</button>
+      <div class="gd-adv-panel" id="gd-adv-panel">
+        <div class="gd-adv-row"><label for="gd-tmin">Min high temp (°F)</label><input type="range" id="gd-tmin" min="0" max="110" step="1"><span class="gd-adv-val" id="gd-tmin-out"></span></div>
+        <div class="gd-adv-row"><label for="gd-tmax">Max high temp (°F)</label><input type="range" id="gd-tmax" min="0" max="115" step="1"><span class="gd-adv-val" id="gd-tmax-out"></span></div>
+        <div class="gd-adv-row"><label for="gd-hmin">Min humidity (%)</label><input type="range" id="gd-hmin" min="0" max="100" step="1"><span class="gd-adv-val" id="gd-hmin-out"></span></div>
+        <div class="gd-adv-row"><label for="gd-hmax">Max humidity (%)</label><input type="range" id="gd-hmax" min="0" max="100" step="1"><span class="gd-adv-val" id="gd-hmax-out"></span></div>
+        <div class="gd-adv-row"><label for="gd-wmin">Min wind (mph)</label><input type="range" id="gd-wmin" min="0" max="30" step="1"><span class="gd-adv-val" id="gd-wmin-out"></span></div>
+        <div class="gd-adv-row"><label for="gd-wmax">Max wind (mph)</label><input type="range" id="gd-wmax" min="0" max="35" step="1"><span class="gd-adv-val" id="gd-wmax-out"></span></div>
+        <div class="gd-adv-row"><label for="gd-precip">Max precipitation (in)</label><input type="range" id="gd-precip" min="0" max="0.3" step="0.01"><span class="gd-adv-val" id="gd-precip-out"></span></div>
+        <div class="gd-adv-row"><label for="gd-sky">Sky cover allowed</label><input type="range" id="gd-sky" min="0" max="2" step="1"><span class="gd-adv-val" id="gd-sky-out"></span></div>
       </div>
     </div>
 
-    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:1.25rem;">
-      <div class="gd-card">
-        <div class="gd-stat-label">Good days</div>
-        <div class="gd-stat-val" id="gd-total">–</div>
+    <div class="gd-section-title">Your next good days</div>
+    <div class="gd-card">
+      <div id="gd-next-list" class="gd-next-list"></div>
+      <div id="gd-next-empty" style="display:none; font-size:13px; color:#5F5E5A;">No great matches in the next 16 days with these settings — try relaxing the slider.</div>
+    </div>
+
+    <div class="gd-section-title">Day-by-day calendar</div>
+    <div class="gd-card">
+      <div class="gd-year-tabs" id="gd-year-tabs"></div>
+      <div class="gd-legend">
+        <span><span class="gd-legend-dot" style="background:#639922;"></span>Good</span>
+        <span><span class="gd-legend-dot" style="background:#EF9F27;"></span>Okay</span>
+        <span><span class="gd-legend-dot" style="background:#F09595;"></span>Bad</span>
+        <span><span class="gd-legend-dot" style="background:#E4E0D6;"></span>No data</span>
       </div>
-      <div class="gd-card">
-        <div class="gd-stat-label">Out of days tracked</div>
-        <div class="gd-stat-val" id="gd-outof" style="color:#5F5E5A;">–</div>
+      <div class="gd-cal-grid" id="gd-cal-grid"></div>
+      <div class="gd-detail" id="gd-detail" style="margin-top:0.75rem; border-top:1px solid #E4E0D6; padding-top:0.75rem;">Click any day to see its details.</div>
+    </div>
+
+    <div class="gd-section-title">Best months for it</div>
+    <div class="gd-card">
+      <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap:12px; margin-bottom:1rem;">
+        <div><div class="gd-stat-label">Total good days found</div><div class="gd-stat-val" id="gd-total">–</div></div>
+        <div><div class="gd-stat-label">Days tracked</div><div class="gd-stat-val" id="gd-outof" style="color:#5F5E5A;">–</div></div>
+        <div><div class="gd-stat-label">Best month</div><div class="gd-stat-val" id="gd-bestmonth" style="font-size:16px;">–</div></div>
       </div>
-      <div class="gd-card">
-        <div class="gd-stat-label">Share of days</div>
-        <div class="gd-stat-val" id="gd-pct">–</div>
-      </div>
-      <div class="gd-card">
-        <div class="gd-stat-label">Best month</div>
-        <div class="gd-stat-val" id="gd-bestmonth" style="font-size:18px;">–</div>
+      <div style="position:relative; height:240px;">
+        <canvas id="gd-chart" role="img" aria-label="Bar chart of average good outdoor days by month"></canvas>
       </div>
     </div>
 
-    <div style="margin-bottom:1.5rem; position:relative; height:260px;">
-      <canvas id="gd-chart" role="img" aria-label="Bar chart of good outdoor days by month, comparing each of the last two years"></canvas>
-    </div>
-
-    <p style="font-size:12px; color:#898781; margin:0;">Source: Open-Meteo historical weather API (ERA5 / ECMWF IFS reanalysis), fetched live for 36.3729°N, -94.2088°W.</p>
+    <p style="font-size:11px; color:#898781; margin:1.25rem 0 0;">Source: Open-Meteo historical and forecast weather APIs (ERA5 / ECMWF IFS reanalysis), live for 36.3729°N, -94.2088°W. Activity thresholds are informal heuristics, not official guidance — tune them to your own comfort.</p>
   </div>
 </div>
 
@@ -87,147 +112,354 @@
 <script>
 (function() {
   var LAT = 36.3729, LON = -94.2088;
-  var chartRef = null;
   var days = [];
+  var byDate = {};
+  var forecastDays = [];
+  var chartRef = null;
+  var selectedYear = null;
+  var manualOverride = false;
+  var currentPreset = 'custom';
 
-  function fmtDate(d) {
-    return d.toISOString().slice(0,10);
+  var PRESETS = {
+    custom:    { label: 'My ideal day', perfect: {tMin:72,tMax:80,hMin:45,hMax:55,wMin:8,wMax:13,precipMax:0,skyMax:0}, relaxed: {tMin:55,tMax:92,hMin:20,hMax:75,wMin:0,wMax:20,precipMax:0.15,skyMax:2} },
+    walking:   { label: 'Walking',      perfect: {tMin:55,tMax:85,hMin:20,hMax:70,wMin:0,wMax:15,precipMax:0.02,skyMax:1}, relaxed: {tMin:40,tMax:95,hMin:0,hMax:85,wMin:0,wMax:25,precipMax:0.2,skyMax:2} },
+    hiking:    { label: 'Hiking',       perfect: {tMin:50,tMax:78,hMin:20,hMax:60,wMin:0,wMax:12,precipMax:0,skyMax:0},    relaxed: {tMin:38,tMax:90,hMin:0,hMax:80,wMin:0,wMax:20,precipMax:0.1,skyMax:2} },
+    cycling:   { label: 'Cycling',      perfect: {tMin:58,tMax:80,hMin:20,hMax:60,wMin:0,wMax:10,precipMax:0,skyMax:0},    relaxed: {tMin:45,tMax:92,hMin:0,hMax:75,wMin:0,wMax:18,precipMax:0.05,skyMax:2} },
+    pickleball:{ label: 'Pickleball',   perfect: {tMin:65,tMax:82,hMin:20,hMax:55,wMin:0,wMax:8,precipMax:0,skyMax:0},     relaxed: {tMin:55,tMax:92,hMin:0,hMax:70,wMin:0,wMax:15,precipMax:0.02,skyMax:1} },
+    dining:    { label: 'Outdoor dining', perfect: {tMin:65,tMax:80,hMin:25,hMax:60,wMin:0,wMax:10,precipMax:0,skyMax:0},  relaxed: {tMin:55,tMax:90,hMin:0,hMax:75,wMin:0,wMax:18,precipMax:0.05,skyMax:2} }
+  };
+  var SKY_LABELS = ['Clear skies', 'Partly cloudy', 'Overcast'];
+  var STRICT_LABELS = [[0,20,'Relaxed'],[20,45,'Comfortable'],[45,70,'Balanced'],[70,90,'Nice'],[90,101,'Perfect']];
+
+  function fmtDate(d) { return d.toISOString().slice(0,10); }
+  function lerp(a,b,t) { return a + (b - a) * t; }
+  function round1(n) { return Math.round(n * 10) / 10; }
+
+  function skyCategory(code) {
+    if (code >= 45) return 9;
+    if (code <= 1) return 0;
+    if (code === 2) return 1;
+    return 2;
   }
 
-  var end = new Date();
-  end.setDate(end.getDate() - 6);
+  function getThresholds() {
+    if (manualOverride) {
+      return {
+        tMin: parseFloat(document.getElementById('gd-tmin').value),
+        tMax: parseFloat(document.getElementById('gd-tmax').value),
+        hMin: parseFloat(document.getElementById('gd-hmin').value),
+        hMax: parseFloat(document.getElementById('gd-hmax').value),
+        wMin: parseFloat(document.getElementById('gd-wmin').value),
+        wMax: parseFloat(document.getElementById('gd-wmax').value),
+        precipMax: parseFloat(document.getElementById('gd-precip').value),
+        skyMax: parseInt(document.getElementById('gd-sky').value, 10)
+      };
+    }
+    var p = PRESETS[currentPreset];
+    var t = parseInt(document.getElementById('gd-strictness').value, 10) / 100;
+    return {
+      tMin: Math.round(lerp(p.relaxed.tMin, p.perfect.tMin, t)),
+      tMax: Math.round(lerp(p.relaxed.tMax, p.perfect.tMax, t)),
+      hMin: Math.round(lerp(p.relaxed.hMin, p.perfect.hMin, t)),
+      hMax: Math.round(lerp(p.relaxed.hMax, p.perfect.hMax, t)),
+      wMin: Math.round(lerp(p.relaxed.wMin, p.perfect.wMin, t)),
+      wMax: Math.round(lerp(p.relaxed.wMax, p.perfect.wMax, t)),
+      precipMax: round1(lerp(p.relaxed.precipMax, p.perfect.precipMax, t) * 100) / 100,
+      skyMax: Math.round(lerp(p.relaxed.skyMax, p.perfect.skyMax, t))
+    };
+  }
+
+  function classify(day, th) {
+    if (day.tmax === null || day.tmax === undefined) return { status: 'nodata', fails: [] };
+    var sky = skyCategory(day.code);
+    var fails = [];
+    if (sky === 9) fails.push('severe weather');
+    if (day.tmax < th.tMin || day.tmax > th.tMax) fails.push('temp');
+    if (day.humidity !== null && (day.humidity < th.hMin || day.humidity > th.hMax)) fails.push('humidity');
+    if (day.wind < th.wMin || day.wind > th.wMax) fails.push('wind');
+    if (day.precip > th.precipMax) fails.push('rain');
+    if (sky !== 9 && sky > th.skyMax) fails.push('sky');
+    var status;
+    if (sky === 9 || fails.length >= 2) status = 'bad';
+    else if (fails.length === 1) status = 'okay';
+    else status = 'good';
+    return { status: status, fails: fails };
+  }
+
+  function explainDay(day) {
+    var skyIdx = skyCategory(day.code);
+    var skyText = skyIdx === 9 ? 'stormy/poor conditions' : SKY_LABELS[skyIdx];
+    return Math.round(day.tmax) + '\u00B0F \u00B7 ' + day.precip.toFixed(2) + '" rain \u00B7 ' +
+      Math.round(day.wind) + ' mph wind \u00B7 ' + (day.humidity !== null ? Math.round(day.humidity) + '% humidity' : 'humidity n/a') +
+      ' \u00B7 ' + skyText;
+  }
+
+  function buildEnd() { var e = new Date(); e.setDate(e.getDate() - 6); return e; }
+
+  var end = buildEnd();
   var start = new Date(end);
   start.setDate(start.getDate() - 730);
 
-  var url = "https://archive-api.open-meteo.com/v1/archive?latitude=" + LAT + "&longitude=" + LON +
+  var histUrl = "https://archive-api.open-meteo.com/v1/archive?latitude=" + LAT + "&longitude=" + LON +
     "&start_date=" + fmtDate(start) + "&end_date=" + fmtDate(end) +
     "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,relative_humidity_2m_mean" +
     "&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago";
 
-  fetch(url).then(function(r) {
-    if (!r.ok) throw new Error("Request failed: " + r.status);
-    return r.json();
-  }).then(function(data) {
-    var d = data.daily;
-    for (var i = 0; i < d.time.length; i++) {
-      days.push({
-        date: d.time[i],
-        year: d.time[i].slice(0,4),
-        month: parseInt(d.time[i].slice(5,7), 10),
-        tmax: d.temperature_2m_max[i],
-        tmin: d.temperature_2m_min[i],
-        precip: d.precipitation_sum[i],
-        wind: d.wind_speed_10m_max[i],
-        humidity: d.relative_humidity_2m_mean ? d.relative_humidity_2m_mean[i] : null,
-        code: d.weather_code[i]
-      });
+  var fcUrl = "https://api.open-meteo.com/v1/forecast?latitude=" + LAT + "&longitude=" + LON +
+    "&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_sum,wind_speed_10m_max,relative_humidity_2m_mean" +
+    "&forecast_days=16&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=America%2FChicago";
+
+  Promise.all([
+    fetch(histUrl).then(function(r) { if (!r.ok) throw new Error('history ' + r.status); return r.json(); }),
+    fetch(fcUrl).then(function(r) { if (!r.ok) throw new Error('forecast ' + r.status); return r.json(); }).catch(function() { return null; })
+  ]).then(function(results) {
+    var hist = results[0].daily;
+    for (var i = 0; i < hist.time.length; i++) {
+      var d = {
+        date: hist.time[i], year: hist.time[i].slice(0,4), month: parseInt(hist.time[i].slice(5,7),10), dom: parseInt(hist.time[i].slice(8,10),10),
+        tmax: hist.temperature_2m_max[i], tmin: hist.temperature_2m_min[i], precip: hist.precipitation_sum[i],
+        wind: hist.wind_speed_10m_max[i], humidity: hist.relative_humidity_2m_mean ? hist.relative_humidity_2m_mean[i] : null, code: hist.weather_code[i]
+      };
+      days.push(d);
+      byDate[d.date] = d;
     }
-    document.getElementById('gd-daterange').textContent =
-      "Historical data from " + d.time[0] + " to " + d.time[d.time.length - 1] + " (" + d.time.length + " days)";
+    if (results[1] && results[1].daily) {
+      var fc = results[1].daily;
+      for (var j = 0; j < fc.time.length; j++) {
+        forecastDays.push({
+          date: fc.time[j], tmax: fc.temperature_2m_max[j], precip: fc.precipitation_sum[j],
+          wind: fc.wind_speed_10m_max[j], humidity: fc.relative_humidity_2m_mean ? fc.relative_humidity_2m_mean[j] : null, code: fc.weather_code[j]
+        });
+      }
+    }
     document.getElementById('gd-loading').style.display = 'none';
     document.getElementById('gd-content').style.display = 'block';
+    buildPresetButtons();
+    buildYearTabs();
     wireControls();
-    recompute();
+    render();
   }).catch(function(err) {
-    document.getElementById('gd-loading').textContent =
-      "Could not load weather data (" + err.message + "). Try reloading.";
+    document.getElementById('gd-loading').textContent = 'Could not load weather data (' + err.message + '). Try reloading.';
   });
 
-  var STORM_CODES = [65, 67, 75, 82, 86, 95, 96, 99];
+  function buildPresetButtons() {
+    var wrap = document.getElementById('gd-presets');
+    Object.keys(PRESETS).forEach(function(key) {
+      var btn = document.createElement('button');
+      btn.className = 'gd-preset-btn' + (key === currentPreset ? ' active' : '');
+      btn.textContent = PRESETS[key].label;
+      btn.addEventListener('click', function() {
+        currentPreset = key;
+        manualOverride = false;
+        document.querySelectorAll('.gd-preset-btn').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        render();
+      });
+      wrap.appendChild(btn);
+    });
+  }
+
+  function buildYearTabs() {
+    var years = [];
+    days.forEach(function(d) { if (years.indexOf(d.year) === -1) years.push(d.year); });
+    years.sort();
+    selectedYear = years[years.length - 1];
+    var wrap = document.getElementById('gd-year-tabs');
+    years.forEach(function(y) {
+      var btn = document.createElement('button');
+      btn.className = 'gd-year-tab' + (y === selectedYear ? ' active' : '');
+      btn.textContent = y;
+      btn.addEventListener('click', function() {
+        selectedYear = y;
+        document.querySelectorAll('.gd-year-tab').forEach(function(b) { b.classList.remove('active'); });
+        btn.classList.add('active');
+        renderCalendar(getThresholds());
+      });
+      wrap.appendChild(btn);
+    });
+  }
 
   function wireControls() {
-    ['gd-tmin','gd-tmax','gd-precip','gd-wind','gd-humidity'].forEach(function(id) {
-      document.getElementById(id).addEventListener('input', recompute);
+    document.getElementById('gd-strictness').addEventListener('input', function() {
+      manualOverride = false;
+      render();
     });
-    document.getElementById('gd-stormfree').addEventListener('change', recompute);
+    document.getElementById('gd-adv-toggle').addEventListener('click', function() {
+      var panel = document.getElementById('gd-adv-panel');
+      panel.style.display = panel.style.display === 'block' ? 'none' : 'block';
+    });
+    ['gd-tmin','gd-tmax','gd-hmin','gd-hmax','gd-wmin','gd-wmax','gd-precip','gd-sky'].forEach(function(id) {
+      document.getElementById(id).addEventListener('input', function() {
+        manualOverride = true;
+        render();
+      });
+    });
   }
 
-  function isGood(day, params) {
-    if (day.tmax === null || day.tmax === undefined) return false;
-    if (day.tmax < params.tmin || day.tmax > params.tmax) return false;
-    if (day.precip > params.precip) return false;
-    if (day.wind > params.wind) return false;
-    if (day.humidity !== null && day.humidity > params.humidity) return false;
-    if (params.stormfree && STORM_CODES.indexOf(day.code) !== -1) return false;
-    return true;
+  function syncAdvancedSliders(th) {
+    if (!manualOverride) {
+      document.getElementById('gd-tmin').value = th.tMin;
+      document.getElementById('gd-tmax').value = th.tMax;
+      document.getElementById('gd-hmin').value = th.hMin;
+      document.getElementById('gd-hmax').value = th.hMax;
+      document.getElementById('gd-wmin').value = th.wMin;
+      document.getElementById('gd-wmax').value = th.wMax;
+      document.getElementById('gd-precip').value = th.precipMax;
+      document.getElementById('gd-sky').value = th.skyMax;
+    }
+    document.getElementById('gd-tmin-out').textContent = th.tMin + '\u00B0F';
+    document.getElementById('gd-tmax-out').textContent = th.tMax + '\u00B0F';
+    document.getElementById('gd-hmin-out').textContent = th.hMin + '%';
+    document.getElementById('gd-hmax-out').textContent = th.hMax + '%';
+    document.getElementById('gd-wmin-out').textContent = th.wMin + ' mph';
+    document.getElementById('gd-wmax-out').textContent = th.wMax + ' mph';
+    document.getElementById('gd-precip-out').textContent = th.precipMax.toFixed(2) + '"';
+    document.getElementById('gd-sky-out').textContent = SKY_LABELS[th.skyMax];
   }
 
-  function recompute() {
-    var params = {
-      tmin: parseFloat(document.getElementById('gd-tmin').value),
-      tmax: parseFloat(document.getElementById('gd-tmax').value),
-      precip: parseFloat(document.getElementById('gd-precip').value),
-      wind: parseFloat(document.getElementById('gd-wind').value),
-      humidity: parseFloat(document.getElementById('gd-humidity').value),
-      stormfree: document.getElementById('gd-stormfree').checked
-    };
+  function strictLabel(v) {
+    for (var i = 0; i < STRICT_LABELS.length; i++) {
+      if (v >= STRICT_LABELS[i][0] && v < STRICT_LABELS[i][1]) return STRICT_LABELS[i][2];
+    }
+    return 'Balanced';
+  }
 
-    document.getElementById('gd-tmin-out').textContent = params.tmin + '°F';
-    document.getElementById('gd-tmax-out').textContent = params.tmax + '°F';
-    document.getElementById('gd-precip-out').textContent = params.precip.toFixed(2) + '"';
-    document.getElementById('gd-wind-out').textContent = params.wind + ' mph';
-    document.getElementById('gd-humidity-out').textContent = params.humidity + '%';
+  function render() {
+    var th = getThresholds();
+    syncAdvancedSliders(th);
+    document.getElementById('gd-strictness-label').textContent = manualOverride ? 'Custom (manual)' : strictLabel(parseInt(document.getElementById('gd-strictness').value,10));
 
     var goodCount = 0;
-    var monthTotals = {};
-    var years = [];
+    var monthGood = new Array(12).fill(0);
+    var monthYearsSeen = new Array(12).fill(0).map(function(){ return {}; });
 
     days.forEach(function(day) {
-      var good = isGood(day, params);
-      if (good) goodCount++;
-      if (years.indexOf(day.year) === -1) years.push(day.year);
-      var key = day.year + '-' + day.month;
-      if (!monthTotals[key]) monthTotals[key] = { year: day.year, month: day.month, good: 0 };
-      if (good) monthTotals[key].good++;
+      var c = classify(day, th);
+      if (c.status === 'good') {
+        goodCount++;
+        monthGood[day.month - 1]++;
+      }
+      monthYearsSeen[day.month - 1][day.year] = true;
     });
-    years.sort();
+
+    var annualized = Math.round((goodCount / days.length) * 365);
+    document.getElementById('gd-hero-num').textContent = annualized.toLocaleString();
+    document.getElementById('gd-hero-sub').textContent = 'Based on ' + PRESETS[currentPreset].label.toLowerCase() +
+      ' conditions: ' + th.tMin + '\u2013' + th.tMax + '\u00B0F, ' + th.hMin + '\u2013' + th.hMax + '% humidity, up to ' +
+      th.wMax + ' mph wind, ' + SKY_LABELS[th.skyMax].toLowerCase() + '.';
 
     document.getElementById('gd-total').textContent = goodCount.toLocaleString();
     document.getElementById('gd-outof').textContent = days.length.toLocaleString();
-    document.getElementById('gd-pct').textContent = ((goodCount / days.length) * 100).toFixed(1) + '%';
 
     var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-    var byMonth = new Array(12).fill(0);
-    var byMonthCount = new Array(12).fill(0);
-    Object.keys(monthTotals).forEach(function(k) {
-      var m = monthTotals[k];
-      byMonth[m.month - 1] += m.good;
-      byMonthCount[m.month - 1] += 1;
+    var avgByMonth = monthGood.map(function(g, i) {
+      var yrs = Object.keys(monthYearsSeen[i]).length || 1;
+      return g / yrs;
     });
     var bestIdx = 0;
-    var bestAvg = -1;
-    for (var i = 0; i < 12; i++) {
-      var avg = byMonthCount[i] ? byMonth[i] / byMonthCount[i] : 0;
-      if (avg > bestAvg) { bestAvg = avg; bestIdx = i; }
-    }
-    document.getElementById('gd-bestmonth').textContent = monthNames[bestIdx] + ' (avg ' + bestAvg.toFixed(1) + ')';
+    for (var i = 1; i < 12; i++) { if (avgByMonth[i] > avgByMonth[bestIdx]) bestIdx = i; }
+    document.getElementById('gd-bestmonth').textContent = monthNames[bestIdx] + ' (avg ' + avgByMonth[bestIdx].toFixed(1) + ' days)';
 
-    var datasets = years.map(function(yr, idx) {
-      var colors = ['#3B6D11', '#639922'];
-      var arr = monthNames.map(function(name, m) {
-        var key = yr + '-' + (m + 1);
-        return monthTotals[key] ? monthTotals[key].good : 0;
-      });
-      return { label: yr, data: arr, backgroundColor: colors[idx % colors.length], borderRadius: 3 };
-    });
+    renderChart(monthNames, avgByMonth, bestIdx);
+    renderCalendar(th);
+    renderNextGoodDays(th);
+  }
 
+  function renderChart(labels, data, bestIdx) {
+    var colors = data.map(function(v, i) { return i === bestIdx ? '#3B6D11' : '#97C459'; });
     if (chartRef) {
-      chartRef.data.datasets = datasets;
+      chartRef.data.datasets[0].data = data;
+      chartRef.data.datasets[0].backgroundColor = colors;
       chartRef.update();
     } else {
       chartRef = new Chart(document.getElementById('gd-chart'), {
         type: 'bar',
-        data: { labels: monthNames, datasets: datasets },
+        data: { labels: labels, datasets: [{ label: 'Avg good days', data: data, backgroundColor: colors, borderRadius: 3 }] },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          scales: {
-            y: { beginAtZero: true, ticks: { precision: 0 }, title: { display: true, text: 'Good days' } }
-          },
-          plugins: { legend: { display: true, position: 'top' } }
+          responsive: true, maintainAspectRatio: false,
+          scales: { y: { beginAtZero: true, title: { display: true, text: 'Avg good days / month' } } },
+          plugins: { legend: { display: false } }
         }
       });
     }
+  }
+
+  var STATUS_COLOR = { good: '#639922', okay: '#EF9F27', bad: '#F09595', nodata: '#E4E0D6' };
+
+  function renderCalendar(th) {
+    var grid = document.getElementById('gd-cal-grid');
+    grid.innerHTML = '';
+    var monthNames = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    for (var m = 0; m < 12; m++) {
+      var monthDiv = document.createElement('div');
+      monthDiv.className = 'gd-cal-month';
+      var title = document.createElement('div');
+      title.className = 'gd-cal-month-name';
+      title.textContent = monthNames[m];
+      monthDiv.appendChild(title);
+      var daysGrid = document.createElement('div');
+      daysGrid.className = 'gd-cal-days';
+      var firstOfMonth = new Date(parseInt(selectedYear,10), m, 1);
+      var leadBlanks = firstOfMonth.getDay();
+      for (var b = 0; b < leadBlanks; b++) {
+        var blank = document.createElement('div');
+        daysGrid.appendChild(blank);
+      }
+      var daysInMonth = new Date(parseInt(selectedYear,10), m + 1, 0).getDate();
+      for (var dnum = 1; dnum <= daysInMonth; dnum++) {
+        var dateStr = selectedYear + '-' + String(m+1).padStart(2,'0') + '-' + String(dnum).padStart(2,'0');
+        var cell = document.createElement('div');
+        cell.className = 'gd-cal-cell';
+        var dayObj = byDate[dateStr];
+        var status = 'nodata';
+        if (dayObj) status = classify(dayObj, th).status;
+        cell.style.background = STATUS_COLOR[status];
+        cell.title = dateStr;
+        (function(ds, dobj) {
+          cell.addEventListener('click', function() {
+            var detail = document.getElementById('gd-detail');
+            if (!dobj) { detail.textContent = ds + ': no data available.'; return; }
+            var c = classify(dobj, th);
+            var label = c.status === 'good' ? 'Good day' : c.status === 'okay' ? 'Okay day' : 'Not ideal';
+            detail.textContent = ds + ' \u2014 ' + label + ': ' + explainDay(dobj);
+          });
+        })(dateStr, dayObj);
+        daysGrid.appendChild(cell);
+      }
+      monthDiv.appendChild(daysGrid);
+      grid.appendChild(monthDiv);
+    }
+  }
+
+  function renderNextGoodDays(th) {
+    var list = document.getElementById('gd-next-list');
+    var empty = document.getElementById('gd-next-empty');
+    list.innerHTML = '';
+    var matches = [];
+    forecastDays.forEach(function(day) {
+      if (matches.length >= 5) return;
+      var c = classify(day, th);
+      if (c.status === 'good') matches.push(day);
+    });
+    if (matches.length === 0) {
+      empty.style.display = 'block';
+      return;
+    }
+    empty.style.display = 'none';
+    matches.forEach(function(day) {
+      var card = document.createElement('div');
+      card.className = 'gd-next-card';
+      var dt = new Date(day.date + 'T12:00:00');
+      var dateLabel = document.createElement('div');
+      dateLabel.className = 'gd-next-date';
+      dateLabel.textContent = dt.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+      var detail = document.createElement('div');
+      detail.className = 'gd-next-detail';
+      detail.textContent = explainDay(day);
+      card.appendChild(dateLabel);
+      card.appendChild(detail);
+      list.appendChild(card);
+    });
   }
 })();
 </script>
